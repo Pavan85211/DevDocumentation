@@ -1,6 +1,6 @@
 # DevDocumentation
 
-Q1: Can you explain your experience with AWS and DevOps practices?
+#Q1: Can you explain your experience with AWS and DevOps practices?
 A: I have extensive experience working in AWS cloud environments and implementing DevOps practices. My expertise includes setting up CI/CD pipelines using GitLab and Jenkins, managing infrastructure with Terraform, and containerizing applications using Docker and Kubernetes. I have also worked with AWS services like EC2, EKS, S3, VPC, Route 53, ELB, and CloudWatch for application development and monitoring.
 
 Q2: What is your experience with Infrastructure as Code (IaC)?
