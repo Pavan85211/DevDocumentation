@@ -4,6 +4,3 @@ A: I have extensive experience working in AWS cloud environments and implementin
 
 ## Can you describe a CI/CD pipeline you implemented using GitLab/Jenkins?
 A: I have implemented CI/CD pipelines using GitLab CI/CD and Jenkins. In GitLab, I configured .gitlab-ci.yml files to define build, test, and deployment stages running in Docker containers. I used GitLab Runners for executing jobs and integrated Docker Hub for managing containerized applications. In Jenkins, I configured pipeline scripts for automating builds, testing, and deployments across multiple environments for devops
-
-## Can you describe a CI/CD pipeline you implemented using GitLab/Jenkins?
-A: I have implemented CI/CD pipelines using GitLab CI/CD and Jenkins. In GitLab, I configured .gitlab-ci.yml files to define build, test, and deployment stages running in Docker containers. I used GitLab Runners for executing jobs and integrated Docker Hub for managing containerized applications. In Jenkins, I configured pipeline scripts for automating builds, testing, and deployments across multiple environments for devops
