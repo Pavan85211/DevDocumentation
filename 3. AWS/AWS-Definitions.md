@@ -162,7 +162,7 @@ After creating this Lambda function, follow these steps to integrate it with API
 For example, if your endpoint URL is `https://your-api-id.execute-api.region.amazonaws.com`, and you've defined a resource called `hello`, accessing `https://your-api-id.execute-api.region.amazonaws.com/hello` should trigger your Lambda function and return the JSON response.
 Remember, this is a very basic example. In real-world scenarios, you'll likely need to handle more complex requests and responses, authentication, authorization, error handling, etc.
 
-What is CloudWatch in AWS ? Explain it..
+## What is CloudWatch in AWS ? Explain it..
 Amazon CloudWatch is a monitoring and observability service provided by Amazon Web Services (AWS). It is designed to collect and track metrics, collect and monitor log files, set alarms, and automatically react to changes in your AWS resources. CloudWatch helps AWS users gain insight into their applications, infrastructure, and overall AWS environment by providing data and actionable insights.
 Here are some key features of CloudWatch:
 1. Metrics Monitoring: CloudWatch collects and monitors various metrics from your AWS resources such as EC2 instances, EBS volumes, DynamoDB tables, and more. These metrics can include CPU utilization, network traffic, disk usage, and more. You can visualize these metrics using CloudWatch dashboards to gain insights into the performance of your resources.
