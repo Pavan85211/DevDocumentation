@@ -26,7 +26,8 @@ spec:
           image: stacksimplify/kube-helloworld:1.0.0
           ports:
             - containerPort: 8080
-
+            
+```
 
 ## 02-backend-clusterip-service.yml
 
