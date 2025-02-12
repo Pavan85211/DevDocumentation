@@ -1,6 +1,8 @@
 # Deployments with YAML
 ## Step-01: Kubernetes YAML Top level Objects
 
+```yml
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -38,4 +40,6 @@ spec:
       port: 80
       targetPort: 80
       nodePort: 31233
+
+```
     
