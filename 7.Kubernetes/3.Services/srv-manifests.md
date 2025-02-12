@@ -27,13 +27,10 @@ spec:
           ports:
             - containerPort: 8080
 
----
 
 ## 02-backend-clusterip-service.yml
 
 ```yml
-
-
 
 apiVersion: v1
 kind: Service
