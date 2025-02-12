@@ -1,42 +1,34 @@
-Terraform Variables and Datasources
-Step-00: Pre-requisite Note
+# Terraform Variables and Datasources
 
-    Create a terraform-key in AWS EC2 Key pairs which we will reference in our EC2 Instance
+## Step-00: Pre-requisite Note
+- Create a `terraform-key` in AWS EC2 Key pairs which we will reference in our EC2 Instance
 
-Step-01: Introduction
-Terraform Concepts
+## Step-01: Introduction
+### Terraform Concepts
+- Terraform Input Variables
+- Terraform Datasources
+- Terraform Output Values
 
-    Terraform Input Variables
-    Terraform Datasources
-    Terraform Output Values
+### What are we going to learn ?
+1. Learn about Terraform `Input Variable` basics
+  - AWS Region
+  - Instance Type
+  - Key Name 
+2. Define `Security Groups` and Associate them as a `List item` to AWS EC2 Instance  
+  - vpc-ssh
+  - vpc-web
+3. Learn about Terraform `Output Values`
+  - Public IP
+  - Public DNS
+4. Get latest EC2 AMI ID Using `Terraform Datasources` concept
+5. We are also going to use existing EC2 Key pair `terraform-key`
+6. Use all the above to create an EC2 Instance in default VPC
 
-What are we going to learn ?
 
-    Learn about Terraform Input Variable basics
-
-    AWS Region
-    Instance Type
-    Key Name
-
-    Define Security Groups and Associate them as a List item to AWS EC2 Instance
-
-    vpc-ssh
-    vpc-web
-
-    Learn about Terraform Output Values
-
-    Public IP
-    Public DNS
-
-    Get latest EC2 AMI ID Using Terraform Datasources concept
-    We are also going to use existing EC2 Key pair terraform-key
-    Use all the above to create an EC2 Instance in default VPC
-
-Step-02: c2-variables.tf - Define Input Variables in Terraform
-
-    Terraform Input Variables
-    Terraform Input Variable Usage - 10 different types
-
+## Step-02: c2-variables.tf - Define Input Variables in Terraform
+- [Terraform Input Variables](https://www.terraform.io/docs/language/values/variables.html)
+- [Terraform Input Variable Usage - 10 different types](https://github.com/stacksimplify/hashicorp-certified-terraform-associate/tree/main/05-Terraform-Variables/05-01-Terraform-Input-Variables)
+```t
 # AWS Region
 variable "aws_region" {
   description = "Region in which AWS Resources to be created"
@@ -57,20 +49,20 @@ variable "instance_keypair" {
   type = string
   default = "terraform-key"
 }
-
-    Reference the variables in respective .tffies
-
+```
+- Reference the variables in respective `.tf`fies
+```t
 # c1-versions.tf
 region  = var.aws_region
 
 # c5-ec2instance.tf
 instance_type = var.instance_type
 key_name = var.instance_keypair  
+```
 
-Step-03: c3-ec2securitygroups.tf - Define Security Group Resources in Terraform
-
-    Resource: aws_security_group
-
+## Step-03: c3-ec2securitygroups.tf - Define Security Group Resources in Terraform
+- [Resource: aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group)
+```t
 # Create Security Group - SSH Traffic
 resource "aws_security_group" "vpc-ssh" {
   name        = "vpc-ssh"
@@ -119,16 +111,16 @@ resource "aws_security_group" "vpc-web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-    Reference the security groups in c5-ec2instance.tf file as a list item
-
+```
+- Reference the security groups in `c5-ec2instance.tf` file as a list item
+```t
 # List Item
 vpc_security_group_ids = [aws_security_group.vpc-ssh.id, aws_security_group.vpc-web.id]  
+```
 
-Step-04: c4-ami-datasource.tf - Define Get Latest AMI ID for Amazon Linux2 OS
-
-    Data Source: aws_ami
-
+## Step-04: c4-ami-datasource.tf - Define Get Latest AMI ID for Amazon Linux2 OS
+- [Data Source: aws_ami](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami)
+```t
 # Get latest AMI ID for Amazon Linux2 OS
 # Get Latest AWS AMI ID for Amazon2 Linux
 data "aws_ami" "amzlinux2" {
@@ -151,16 +143,16 @@ data "aws_ami" "amzlinux2" {
     values = [ "x86_64" ]
   }
 }
-
-    Reference the datasource in c5-ec2instance.tf file
-
+```
+- Reference the datasource in `c5-ec2instance.tf` file
+```t
 # Reference Datasource to get the latest AMI ID
 ami = data.aws_ami.amzlinux2.id 
+```
 
-Step-05: c5-ec2instance.tf - Define EC2 Instance Resource
-
-    Resource: aws_instance
-
+## Step-05: c5-ec2instance.tf - Define EC2 Instance Resource
+- [Resource: aws_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance)
+```t
 # EC2 Instance
 resource "aws_instance" "myec2vm" {
   ami = data.aws_ami.amzlinux2.id 
@@ -172,11 +164,12 @@ resource "aws_instance" "myec2vm" {
     "Name" = "EC2 Demo 2"
   }
 }
+```
 
-Step-06: c6-outputs.tf - Define Output Values
 
-    Output Values
-
+## Step-06: c6-outputs.tf - Define Output Values 
+- [Output Values](https://www.terraform.io/docs/language/values/outputs.html)
+```t
 # Terraform Output Values
 output "instance_publicip" {
   description = "EC2 Instance Public IP"
@@ -187,9 +180,10 @@ output "instance_publicdns" {
   description = "EC2 Instance Public DNS"
   value = aws_instance.myec2vm.public_dns
 }
+```
 
-Step-07: Execute Terraform Commands
-
+## Step-07: Execute Terraform Commands
+```t
 # Terraform Initialize
 terraform init
 Observation:
@@ -217,18 +211,20 @@ Observations:
 1) Create resources on cloud
 2) Created terraform.tfstate file when you run the terraform apply command
 3) Verify the EC2 Instance AMI ID which got created
+```
 
-Step-08: Access Application
-
+## Step-08: Access Application
+```t
 # Access index.html
 http://<PUBLIC-IP>/index.html
 http://<PUBLIC-IP>/app1/index.html
 
 # Access metadata.html
 http://<PUBLIC-IP>/app1/metadata.html
+```
 
-Step-09: Clean-Up
-
+## Step-09: Clean-Up
+```t
 # Terraform Destroy
 terraform plan -destroy  # You can view destroy plan using this command
 terraform destroy
@@ -236,4 +232,5 @@ terraform destroy
 # Clean-Up Files
 rm -rf .terraform*
 rm -rf terraform.tfstate*
-
+```
+  
