@@ -20,6 +20,11 @@ Terraform is an infrastructure as code tool used to automate the provisioning an
 
 These are some of the core commands in Terraform, but there are many more available for various purposes, including managing workspaces, importing existing infrastructure, and more.
 
+
+
+
+
+
 To create aws instance using Terraform.
 Certainly! In the Terraform configuration example provided earlier, the `provider` block is used to specify the cloud provider and the region where resources will be provisioned. Here's a breakdown of the `provider` block:
 
