@@ -3,7 +3,7 @@
 ```yml
 
 
-01-backend-deployment.yml
+## 01-backend-deployment.yml
 
 apiVersion: apps/v1
 kind: Deployment
@@ -30,7 +30,7 @@ spec:
             - containerPort: 8080
 
 ---
-02-backend-clusterip-service.yml
+## 02-backend-clusterip-service.yml
 
 apiVersion: v1
 kind: Service
@@ -49,7 +49,7 @@ spec:
       targetPort: 8080 # Container Port
 
 ---
-03-frontend-deployment.yml
+## 03-frontend-deployment.yml
 
 apiVersion: apps/v1
 kind: Deployment
@@ -76,7 +76,7 @@ spec:
             - containerPort: 80
 
 ---
-04-frontend-nodeport-service.yml
+## 04-frontend-nodeport-service.yml
 
 apiVersion: v1
 kind: Service
