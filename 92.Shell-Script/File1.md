@@ -10,6 +10,8 @@ echo "Quoted Values: $@"
 echo "Quoted Values: $*"
 echo "Total Number of Parameters : $#"	
 ```
+
+```shell
 $0 The filename of the current script.
 $n These variables correspond to the arguments with which a script was invoked. Here n is a positive decimal number corresponding to the position of an argument (the first argument is $1, the second argument is $2, and so on).
 $# The number of arguments supplied to a script.
@@ -19,6 +21,7 @@ $? The exit status of the last command executed.
 $$ The process number of the current shell. For shell scripts, this is the process ID under which they are executing.	
 $! The process number of the last background command.
 
+```
 ## copying pub key in authorzedkeys
 
 ```shell
@@ -76,7 +79,7 @@ echo "File not found: $file"
 fi
 ```
 
-### Function
+## Function
 ```shell
 #!/bin/sh
 # Define your function here
