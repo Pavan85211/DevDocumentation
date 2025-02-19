@@ -108,24 +108,33 @@ test-chart/
 ``` 
 
 
-### 4 directories, 10 files
+4 directories, 10 files
 
 Let’s look at each file and directory inside a helm chart and understand its importance.
 
-.helmignore: It’s a hidden file that’s why we’re not able to see it in the chart structure. Run the ls -a command from inside the directory to check it out. It is used to define all the files that we don’t want to include in the helm chart. 
-Chart.yaml: It contains the basic information about the chart.
-charts: It’s an empty directory. We can add any chart’s structure here on which our main chart depends.
-templates: It’s a directory that contains all the Kubernetes manifest files that build an application. By default, helm created deployment.yaml, service.yaml, hpa.yaml, ingress.yaml, serviceaccount.yaml manifest files. We can modify and override these files as per our needs. We can even add other Kubernetes object’s manifest files. These manifest files can be templated to access values from values.yaml file. 
-templates/NOTES.txt: This is a plaintext file that gets printed out after the chart is successfully deployed. 
-templates/_helpers.tpl: That file contains several methods and sub-template. It helps keep our charts organized and avoids repeating the same code in multiple places.
-templates/tests/: We can define tests here in our charts to validate that our chart works as expected when it is installed.
-values.yaml: This file contains the values for the manifest files in the templates directory. For example, image name, replica count, HPA values, etc. We can create different values.yaml files based on the environments and change the values.
-Helm Chart Tutorial: A step-by-step guide
+#### .helmignore: 
+It’s a hidden file that’s why we’re not able to see it in the chart structure. Run the ls -a command from inside the directory to check it out. It is used to define all the files that we don’t want to include in the helm chart. 
+#### Chart.yaml: 
+It contains the basic information about the chart.
+#### charts: 
+It’s an empty directory. We can add any chart’s structure here on which our main chart depends.
+#### templates: 
+It’s a directory that contains all the Kubernetes manifest files that build an application. By default, helm created deployment.yaml, service.yaml, hpa.yaml, ingress.yaml, serviceaccount.yaml manifest files. We can modify and override these files as per our needs. We can even add other Kubernetes object’s manifest files. These manifest files can be templated to access values from values.yaml file. 
+#### templates/NOTES.txt: 
+This is a plaintext file that gets printed out after the chart is successfully deployed. 
+#### templates/_helpers.tpl: 
+That file contains several methods and sub-template. It helps keep our charts organized and avoids repeating the same code in multiple places.
+#### templates/tests/: 
+We can define tests here in our charts to validate that our chart works as expected when it is installed.
+#### values.yaml:
+This file contains the values for the manifest files in the templates directory. For example, image name, replica count, HPA values, etc. We can create different values.yaml files based on the environments and change the values.
+
+#### Helm Chart Tutorial: A step-by-step guide
 Let’s see an example and deploy a chart on our own. We will go deep dive into the Helm structure directories and files. We will modify the chart that we created in the previous step. Let’s check the files and edit them one by one whatever is required.
 
-Chart.yaml
+#### Chart.yaml
 As we know, we mention all the information related to the chart in this file such as the name and type of the chart, some description of the chart, versions, and all.
-
+```yml
 apiVersion: v2
 
 name: test-chart
@@ -146,8 +155,8 @@ Type: There are 2 chart-type options: application and library. Type application 
 Version: It refers to the version of our chart.
 appVersion: It describes the version number of our application.
 There are some other fields also like maintainers, dependencies, icons, etc.
-
-templates
+```
+#### templates:
 We talked earlier about the templates folder, which contains templated Kubernetes manifest files of some common resources. But, we may need some other resources in our application, which we’ll have to create as templates. We can also remove the resources which we don’t need.
 
 For now, we’ll use 2 resources: deployment and service. So let’s remove other files and folders. Our folder will look like this:
@@ -165,7 +174,7 @@ templates/
 
 We can also remove or add the fields in the manifest file according to our needs. So our deployment.yaml and service.yaml will look like this:
 
-deployment.yaml
+#### deployment.yaml
 ```yml 
 
  apiVersion: apps/v1 
@@ -198,7 +207,7 @@ spec:
              protocol: TCP
 
 ```
-Service.yaml
+#### Service.yaml
 
 ```yml
  apiVersion: v1 
@@ -218,20 +227,24 @@ spec:
    {{- include "test-chart.selectorLabels" . | nindent 4 }}
 
 ```
+### Notes fo above code
 We template the Kubernetes object manifest files so that we can reuse them in multiple environments by dynamically assigning values to them using each environment’s values file. Let’s understand these templates.
 
+```yml
 Helm uses template directive, where we provide the object-parameter inside the curly brackets.
 
 {{ .Object.Parameter }}
 There are different objects we can use. In our templates, we’re using Chart and Values. We mention the Chart object for using the parameters defined in the Chart.yaml and the Values object for values.yaml.
+```
 
-For example, in deployment.yaml file:
+#### For example, 
+#### in deployment.yaml file:
 
 For the snippet {{ .Values.replicaCount }}, Helm will check the values.yaml file, find the replicaCount parameter, take the value of it, and render in deployment.yaml file. Similarly for snippet {{ .Chart.Name }}, it will check the Chart.yaml file, find the Name parameter, and get the value of it.
 
 We can also see a snippet {{ include “test-chart.fullname” . }}, here we used the include keyword. Using it we ask Helm to check the _helpers.tpl file where some default templates are defined and get the value from there. So it will check for test-chart.fullname and get the value as per the definition there.
 
-Values.yaml
+#### Values.yaml
 The values.yaml file is a configuration file used to set default values for various parameters. All the values in this file get substituted in the template directives we used in the templates.
 
 The file is structured as key-value pairs, where the key notates the Kubernetes object’s field. Let’s replace the default values.yaml content with the following.
@@ -259,13 +272,13 @@ Now, using these different files, we can customize our values as per the environ
 
 At installation time, we can pass the file name in the command. The object’s template will then take the values accordingly and get deployed in the cluster.
 
-Validate the Helm Chart
+### Validate the Helm Chart
 To validate our helm charts before the actual deployment, helm provides multiple commands. Using these commands, we can check that all the things are in-place and correct.
 
-1. helm lint: 
+#### 1. helm lint: 
 This command runs a series of tests to verify that the chart is valid and all the indentations are fine. It will throw the errors in case of any issues in the charts.
 
-
+```yml
  helm lint 
 or
  helm lint\
@@ -281,15 +294,15 @@ Let’s run this command against our chart.
 
 1 chart(s) linted, 0 chart(s) failed
 We can see that it successfully ran and there are no errors in our chart.
-
-2. helm template: 
+```
+#### 2. helm template: 
 This command checks that the values are getting substituted in the templates. It will generate and display all the manifest files with the substituted values.
 
-
+```yml
  helm template 
 or
  helm template  
-
+```
 
 If you run this command, you’ll get the below output.
 
@@ -351,17 +364,16 @@ spec:
 ```
 At the time of deployment, the release-name will get overridden by the release name we will provide via the helm command.
 
-3. helm install — dry-run:
+### 3. helm install — dry-run:
 This command dry-runs the installation of the manifests and checks that all the templates are working fine. In case of any issues, it will throw the errors. If everything is good, then you will see the manifest output that would get deployed into the cluster.
-
+```yml
 helm install --dry-run <release-name> <chart-name>
 Deploy the Helm Chart
 To deploy a helm chart, we use the helm install command.
+```
 
-
- helm install   
-
-
+ 
+### helm install   
 The above command will consider the default values.yaml file. If you want to change it use the below command.
 
 ```yml
@@ -372,7 +384,7 @@ Now let’s deploy our chart. You’ll get the below output.
 
 helm install nginx test-chart/ -f test-chart/values.yaml
 
-
+```yml
 NAME: nginx
 LAST DEPLOYED: Fri Jan 26 13:15:45 2024
 NAMESPACE: default
@@ -380,7 +392,8 @@ STATUS: deployed
 REVISION: 1
 TEST SUITE: Non
 We can also provide the namespace using the -n option.
-
+```
+```yml
 To get the chart releases, we can use the helm list command. 
 
 helm list
@@ -388,40 +401,45 @@ helm list
 NAME	NAMESPACE	REVISION	UPDATED	  STATUS	CHART 	APP VERSION
 nginx	default 	1 	2024-01-26 13:15:48.399430207 +0000 UTC	deployed	test-chart-0.1.0	      1.0.0
 Now as the chart is deployed, let’s see the Kubernetes resources that we have deployed via the chart.
-
+```
+```yml
 ➜ kubectl get deployments
 
 NAME   	READY 	UP-TO-DATE	AVAILABLE	    AGE
 nginx-test-chart 	  2/2 	2	2	3m23s
+
+```
+```yml
 ➜  kubectl get services
 
 NAME	TYPE	CLUSTER-IP	EXTERNAL-IP	PORT(S)	AGE
 kubernetes	ClusterIP	10.96.0.1 	<none>	443/TCP	99m
 nginx-test-chart	ClusterIP	10.110.143.13	<none>	80/TCP 	3m29s
+```
+```
 ➜  kubectl get pods
 
 NAME 	READY   	  STATUS    	RESTARTS   	AGE
 nginx-test-chart-76cfd7666d-dxw9j	1/1	Running	0	3m33s
 nginx-test-chart-76cfd7666d-gxqx4	1/1	Running	0	3m33s
+```
+```yml
 ➜ kubectl describe pod nginx-test-chart-76cfd7666d-dxw9j | grep image
 
 Normal  Pulling    47s   kubelet   Pulling image "nginx:1.25.3"
 
 Normal  Pulled     31s   kubelet    Successfully pulled image "nginx:1.25.3" in 15.913s
-We can see that Helm added the release name in the name of deployment and service. You can also check the deployment and service manifests by describing them.
 ```
+
+We can see that Helm added the release name in the name of deployment and service. You can also check the deployment and service manifests by describing them.
+
 ### Upgrade the Helm Chart
 To modify the chart and install the updated version, we can use the helm upgrade command.
-
-
  helm upgrade   
-
 
 With a specific values.yaml file:
 
-
  helm upgrade   -f  
-
 
 Suppose we need to change the image of the application. We will use nginx:1.19.9 instead of the current version. So let’s change the image in values.yaml file.
 ```yml
@@ -438,8 +456,9 @@ service:
 
 ```
 
+
+#### Now let’s upgrade our chart.
 ```yml
-Now let’s upgrade our chart.
 ➜ helm upgrade nginx test-chart/ -f test-chart/values.yaml
 Release "nginx" has been upgraded. Happy Helming!
 NAME: nginx
@@ -448,19 +467,22 @@ NAMESPACE: default
 STATUS: deployed
 REVISION: 2
 TEST SUITE: None
-➜  helm list
+```
 
+#### ➜  helm list
+```yml
 NAME	NAMESPACE	REVISION	UPDATED	  STATUS	CHART 	APP VERSION
 nginx	default 	2 	2024-01-26 13:19:45.399430207 +0000 UTC	deployed	test-chart-0.1.0	      1.0.0
 Now you can see that our chart has been upgraded and REVISION 2 is running.
-
+```
 To verify the changes, let’s check the pod image again.
 
-➜  kubectl get pods
-
+#### ➜  kubectl get pods
+```yml
 NAME 	READY   	  STATUS    	RESTARTS   	AGE
 nginx-test-chart-7467f4dc9-hztzl	1/1	Running	0	3m56s
-nginx-test-chart-7467f4dc9-rbppf	1/1	Running	0	4m2s
+nginx-test-chart-7467f4dc9-rbppf	1/1	Running	0	4m2s.
+```yml
 ➜  kubectl describe pod nginx-test-chart-7467f4dc9-hztzl | grep image
 
 Normal  Pulling    4m11s  kubelet            Pulling image "nginx:1.19.9"
@@ -470,21 +492,17 @@ We can see that the pods are running with the new image nginx:1.19.9
 ```
 
 ### Rollback the Helm Chart
-```yml
-To rollback the changes, use the helm rollback command:
 
+To rollback the changes, use the helm rollback command:
 
  helm rollback  
 
-
 Rollback to the specific version:
-
 
  helm rollback   
 
-
 Now let’s roll back our changes to the chart that we made in the last step.
-
+```yml
 ➜  helm rollback nginx
 
 Rollback was a success! Happy Helming!
@@ -532,7 +550,6 @@ Now if you check the deployment, service, and pods, all the resources will get r
 ### Package the Helm Chart
 To distribute the charts with others we need to package the charts. Below is the command for the same, it creates a versioned archive file of the chart.
 
-
  helm package  
 
 
@@ -540,6 +557,7 @@ Now we can share the archive with others manually or upload it to any public/pri
 
 ### Pros and Cons of using Helm
 #### Pros
+```yml
 Helm provides advanced features like hooks and release management and simplifies complex Kubernetes deployments, reducing errors and ensuring consistency. It increases the speed of deployments.
 Helm has a large collection of pre-built charts that can be easily shared and reused. It also has pre-built charts for popular applications.
 Helm charts promote code reuse and version control for applications.
@@ -549,7 +567,9 @@ It helps us streamline our CI/CD pipelines.
 Helm simplifies cluster management by providing a unified way to manage and deploy applications across multiple clusters.
 It helps companies optimize resource utilization by ensuring that applications are deployed with the right amount of resources, reducing waste and improving efficiency.
 Overall, Helm promotes collaboration among team members by providing a standardized way of deploying applications, reducing confusion and errors.
+```
 #### Cons
+```yml
 Helm has complex templating and it needs to be set up separately.
 Helm is not well-suited to projects where a single container needs to be deployed on a server.
 Over-reliance on community components.
@@ -558,8 +578,9 @@ A project with multiple microservices, each with its dependencies, might encount
 Helm’s use of proprietary charts and templates can lead to vendor lock-in, making it difficult to switch to alternative solutions.
 Its current implementation has limited support for hybrid environments, making it less suitable for organizations with mixed infrastructure.
 While Helm is relatively easy to use for basic deployments, its advanced features can be challenging to learn and master, requiring significant time and effort.
-
+```
 ### Top 8 Helm Charts Best Practices
+```yml
 Break down your charts into smaller, reusable modules for easier management and increased flexibility.
 Always version your Helm charts to track changes, enable easy rollbacks, and maintain a clear release history.
 We should increment the version and appVersion each time we make changes to the application.
@@ -570,3 +591,4 @@ Use Helm linting tools to catch issues early.
 Use the Helm community to leverage existing charts. 
 Always test your Helm charts thoroughly using tools like helm test to ensure they work as expected in different scenarios.
 Use ConfigMaps and Secrets for configuration and sensitive data.
+```
