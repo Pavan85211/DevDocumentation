@@ -1,4 +1,5 @@
-#### Helm is a package manager for Kubernetes applications. It helps developers to create packages, install, configure, deploy, and upgrade for the most complex Kubernetes applications. It’s easy to streamline the CI/CD pipeline for workloads as Helm provides an easy and reproducible way to package and distribute Kubernetes applications.
+## Helm
+Helm is a package manager for Kubernetes applications. It helps developers to create packages, install, configure, deploy, and upgrade for the most complex Kubernetes applications. It’s easy to streamline the CI/CD pipeline for workloads as Helm provides an easy and reproducible way to package and distribute Kubernetes applications.
 
 Helm is an open-source project that DeisLabs created and later donated to the Cloud Native Computing Foundation (CNCF). As of today, CNCF maintains it. 
 
